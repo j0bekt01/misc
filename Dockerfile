@@ -54,8 +54,6 @@ WORKDIR /workspace
 # Install rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs --insecure | bash -s -- -y --default-toolchain ${RUST_VERSION}
 ENV PATH="/root/.cargo/bin:/usr/local/bin:$PATH"
-RUN rustc 
-RUN cargo
 # Install Python from source
 # RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz && \
 #     tar -xvf Python-${PYTHON_VERSION}.tgz && \
