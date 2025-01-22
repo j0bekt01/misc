@@ -1,0 +1,77 @@
+---
+input:
+  reference_data:
+    path: s3://working/user-data/nannyml/reference_df.parquet
+    credentials: {}
+    read_args: {}
+  analysis_data:
+    path: s3://working/user-data/nannyml/analysis_df.parquet
+    credentials: {}
+    read_args: {}
+  target_data:
+    path: s3://working/user-data/nannyml/target_df.parquet
+    credentials: {}
+    read_args: {}
+    join_column: id
+
+output:
+  raw_files:
+    path: s3://working/user-data/nannyml/output/
+    format: parquet
+
+column_mapping:
+  reference:
+    features:
+      - acq_channel
+      - app_behavioral_score
+      - requested_credit_limit
+      - app_channel
+      - credit_bureau_score
+      - stated_income
+      - is_customer
+    timestamp: timestamp
+    y_true: y_true
+    y_pred: y_pred
+    y_pred_proba:
+      - y_pred_proba_prepaid_card
+      - y_pred_proba_highstreet_card
+      - y_pred_proba_upmarket_card
+
+  analysis:
+    features:
+      - acq_channel
+      - app_behavioral_score
+      - requested_credit_limit
+      - app_channel
+      - credit_bureau_score
+      - stated_income
+      - is_customer
+    timestamp: timestamp
+    y_pred: y_pred
+    y_pred_proba:
+      - y_pred_proba_prepaid_card
+      - y_pred_proba_highstreet_card
+      - y_pred_proba_upmarket_card
+
+calculators:
+  - type: performance
+    metrics:
+      - roc_auc
+      - accuracy
+      - f1
+      - precision
+      - recall
+    y_true: y_true
+    y_pred: y_pred
+    problem_type: classification_multiclass
+    timestamp: timestamp
+    outputs: []
+    store:
+      path: s3://working/user-data/nannyml/store/
+      credentials: {}
+      filename: performance_metrics.parquet
+    params: {}
+
+problem_type: classification_multiclass
+
+ignore_errors: true
